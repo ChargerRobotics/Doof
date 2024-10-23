@@ -4,34 +4,19 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.subsystems.DriveTrainSubsystem;
-import frc.robot.swerve.SwerveDriveTrain;
-import frc.robot.swerve.SwerveModule;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
-  private DriveTrainSubsystem driveTrainSubsystem;
+  private RobotContainer robotContainer;
 
   @Override
   public void robotInit() {
-    // TODO: actual values for drivetrain
-    SwerveDriveTrain driveTrain = new SwerveDriveTrain(new SwerveModule[] {
-      new SwerveModule(
-        new TalonFXEncoderController(new TalonFX(0)),
-        new CANSparkMaxEncoderController(new CANSparkMax(1, MotorType.kBrushless)),
-        new Translation2d(0, 0)
-      )
-    }, new PIDController(0, 0, 0), new PIDController(0, 0, 0));
-    driveTrainSubsystem = new DriveTrainSubsystem(driveTrain, () -> {
-      // TODO: actual speeds from controller
-      return new ChassisSpeeds(0, 0, 0);
-    });
+    robotContainer = new RobotContainer();
+  }
+
+  @Override
+  public void robotPeriodic() {
+    CommandScheduler.getInstance().run();
   }
 }
