@@ -22,6 +22,11 @@ public class CANSparkMaxEncoderController implements EncoderMotorController {
   }
 
   @Override
+  public void setPosition(double position) {
+    controller.getEncoder().setPosition(position);
+  }
+
+  @Override
   public double getVelocity() {
     return controller.getEncoder().getVelocity();
   }

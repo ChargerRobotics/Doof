@@ -7,5 +7,7 @@ public interface EncoderMotorController {
 
   double getPosition();
 
+  void setPosition(double position);
+
   double getVelocity();
 }
