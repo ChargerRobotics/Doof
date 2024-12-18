@@ -15,7 +15,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.motor.CANSparkMaxEncoderController;
 import frc.robot.subsystems.DriveTrainSubsystem;
-import frc.robot.subsystems.MagSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.OuttakeSubsystem;
 import frc.robot.swerve.SwerveDriveTrain;
 import frc.robot.swerve.SwerveModule;
 
@@ -35,7 +36,7 @@ public class RobotContainer {
     autoEnabledEntry = Shuffleboard.getTab("auto").add("Auto enabled", true)
       .withWidget(BuiltInWidgets.kToggleButton)
       .getEntry();
- 
+
     SwerveDriveTrain driveTrain = new SwerveDriveTrain(new SwerveModule[]{
             new SwerveModule(talonFX(Ports.SWERVE_FRONT_LEFT_DRIVE_ID, false), sparkMaxRotation(Ports.SWERVE_FRONT_LEFT_ROTATE_ID), Constants.FRONT_LEFT_ROTATE_PID, new Translation2d(0.178, 0.173)),
             new SwerveModule(talonFX(Ports.SWERVE_FRONT_RIGHT_DRIVE_ID, false), sparkMaxRotation(Ports.SWERVE_FRONT_RIGHT_ROTATE_ID), Constants.FRONT_RIGHT_ROTATE_PID, new Translation2d(0.178, -0.173)),
@@ -66,13 +67,15 @@ public class RobotContainer {
     PWMSparkMax rightShooterController = new PWMSparkMax(Ports.RIGHT_SHOOTER_PORT);
     rightShooterController.setInverted(true);
     leftShooterController.addFollower(rightShooterController);
-    MagSubsystem magSubsystem = new MagSubsystem(new PWMSparkMax(Ports.INTAKE_PORT), 0.7, leftShooterController, -1);
+
+    IntakeSubsystem intakeSubsystem = new IntakeSubsystem(new PWMSparkMax(Ports.INTAKE_PORT), 0.7);
+    OuttakeSubsystem outtakeSubsystem = new OuttakeSubsystem(leftShooterController, -1);
 
     controller.leftBumper()
-      .whileTrue(magSubsystem.intakeCommand());
+      .whileTrue(intakeSubsystem.intakeCommand());
 
     controller.rightBumper()
-      .whileTrue(magSubsystem.shootCommand());
+      .whileTrue(outtakeSubsystem.outtakeCommand());
 
     reset();
   }
